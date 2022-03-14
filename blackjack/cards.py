@@ -10,6 +10,7 @@ class Hand:
         self.card_values = []
         self.hand_value = 0
         self.soft = False
+        self.busted = False
 
 
     def add(self, card):
@@ -21,6 +22,8 @@ class Hand:
         self.card_values.append(value)
 
         self.update_hand_value(value)
+        if self.hand_value > 21:
+            self.busted = True
 
 
     def get_card_value(self, card):
@@ -41,6 +44,16 @@ class Hand:
             self.hand_value = sum(self.card_values)
         else:
             self.hand_value += val
+
+    
+    def __str__(self):
+        cards = []
+        for d, s in self.cards:
+            cards.append(f"{d}{s}")
+
+        out = f"Hand: {','.join(cards)}\nValue: {self.hand_value}"
+        
+        return out
 
 
 
@@ -112,4 +125,3 @@ class Deck:
             out.append(f"{d}{s}")
         
         return ",".join(out)
-
