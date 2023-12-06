@@ -2,6 +2,7 @@ from itertools import product
 import random
 from players import BJDealer, BJPlayer
 from cards import Hand, Deck
+import numpy as np
 import pandas as pd
 
 
@@ -44,7 +45,7 @@ def play_round(dealer, players, shoe):
     # Play with remaining active players
     if sum([p.active for _, p in players.items()]) > 0:
         # Player moves - no bust
-        player_bet = BET
+        #player_bet = BET
         dealer_card = dealer.get_showing_card()
         for p in players:
             players[p].play(shoe, dealer_card)
@@ -113,7 +114,7 @@ def build_shoe(num_decks):
 
 if __name__ == '__main__':
     ### Build shoe and shuffle
-    NUM_DECKS = 6
+    NUM_DECKS = 2
     shoe = build_shoe(NUM_DECKS)
 
     ### Initialize players
@@ -167,6 +168,15 @@ if __name__ == '__main__':
                    .size() \
                    .transform(lambda x: x / x.sum())
     print(loss_dist.cumsum())
+    print()
+
+    sdf2 = sdf.groupby(['streak', 'result'], as_index=False).size()
+    for n in [10, 20, 30, 40, 50]:
+        sdf2['session'] = np.floor(sdf2.streak / n).astype(int)
+        loss_dist2 = sdf2.query("result == 'loss'").groupby('session', as_index=False)['size'].max().groupby('size').size().transform(lambda x: x / x.sum())
+        print(f"Session size: {n}")
+        print(loss_dist2.cumsum())
+        print()
 
 
 

@@ -79,7 +79,7 @@ class BJPlayer:
 
 
     def _commit(self, result):
-        self.history['hands'].append(self.hands)
+        self.history['hands'].extend(self.hands)
         self.history['bets'].append(self.bet)
         self.history['bank_roll'].append(self.bank_roll)
         self.history['results'].append(result)
